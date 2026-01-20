@@ -1,0 +1,6 @@
+{
+  "depot": "1560 Hartlet Street London Ontario",
+  "input": "addresses.txt",
+  "outRoot": "output",
+  "cacheRoot": "cache"
+}
