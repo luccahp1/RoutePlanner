@@ -1,13 +1,12 @@
 package com.onlyeavestroughs.routeplanner;
 
-import com.onlyeavestroughs.routeplanner.app.RoutePlannerApp;
+import com.onlyeavestroughs.routeplanner.runtime.RunApp;
 
-public class Main {
+public final class Main {
+    private Main() {}
 
     public static void main(String[] args) {
-        // Milestone 1 refactor: ignore CLI args entirely.
-        // Press ▶ in IntelliJ and it runs using run-config.json.
-        int exit = RoutePlannerApp.runFromProjectConfig();
-        System.exit(exit);
+        int exitCode = RunApp.runFromProjectConfig();
+        System.exit(exitCode);
     }
 }

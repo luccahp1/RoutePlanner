@@ -58,7 +58,15 @@ public class RunCommand implements Callable<Integer> {
             validateInputs();
 
             String runId = makeRunId();
-            RunConfig cfg = new RunConfig(depot.trim(), input.toAbsolutePath(), outRoot.toAbsolutePath(), cacheRoot.toAbsolutePath(), runId);
+            RunConfig cfg = new RunConfig(
+                    depot.trim(),
+                    input.toAbsolutePath(),
+                    outRoot.toAbsolutePath(),
+                    cacheRoot.toAbsolutePath(),
+                    runId,
+                    "FAKE_ORS_KEY",
+                    "driving-car"
+            );
             RunDirs dirs = initDirs(cfg);
 
             AddressReader.ReadResult readResult = AddressReader.read(cfg.inputFile());

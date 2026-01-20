@@ -1,6 +1,8 @@
 {
-  "depot": "1560 Hartlet Street London Ontario",
+  "depot": "2050 Kains Road London Ontario",
   "input": "addresses.txt",
   "outRoot": "output",
-  "cacheRoot": "cache"
+  "cacheRoot": "cache",
+  "profile": "driving-car",
+  "orsApiKey": "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjljZWVkODhlZmRhMzRjZWE4YzY1ZmNhNDRlYWRlNjYzIiwiaCI6Im11cm11cjY0In0="
 }
