@@ -6,6 +6,10 @@ import com.onlyeavestroughs.routeplanner.io.AddressReader;
 import com.onlyeavestroughs.routeplanner.io.ReportWriter;
 import com.onlyeavestroughs.routeplanner.ors.OrsGeocoder;
 import com.onlyeavestroughs.routeplanner.ors.OrsGeocoder.GeocodeOutcome;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -72,7 +76,9 @@ public final class RunApp {
             return 0;
 
         } catch (Exception e) {
-            System.err.println("ERROR: " + e.getMessage());
+            System.err.println("ERROR: " + e.getClass().getName() + ": " + e.getMessage());
+            System.err.println("Working directory: " + System.getProperty("user.dir"));
+            e.printStackTrace();
             return 2;
         }
     }
@@ -147,12 +153,16 @@ public final class RunApp {
         root.put("failedStops", failedStops);
 
         // Placeholder for upcoming milestones (splitting, ordering, Google Maps URLs)
-        root.put("routes", List.of(
-                Map.of("routeIndex", 1, "orderedStopIds", List.of(), "googleMapsUrlPrimary", null, "googleMapsUrlFallback", List.of()),
-                Map.of("routeIndex", 2, "orderedStopIds", List.of(), "googleMapsUrlPrimary", null, "googleMapsUrlFallback", List.of()),
-                Map.of("routeIndex", 3, "orderedStopIds", List.of(), "googleMapsUrlPrimary", null, "googleMapsUrlFallback", List.of()),
-                Map.of("routeIndex", 4, "orderedStopIds", List.of(), "googleMapsUrlPrimary", null, "googleMapsUrlFallback", List.of())
-        ));
+        List<Map<String, Object>> routes = new ArrayList<>();
+        for (int r = 1; r <= 4; r++) {
+            Map<String, Object> route = new LinkedHashMap<>();
+            route.put("routeIndex", r);
+            route.put("orderedStopIds", List.of());
+            route.put("googleMapsUrlPrimary", null);
+            route.put("googleMapsUrlFallback", List.of());
+            routes.add(route);
+        }
+        root.put("routes", routes);
 
         mapper.writeValue(file.toFile(), root);
     }

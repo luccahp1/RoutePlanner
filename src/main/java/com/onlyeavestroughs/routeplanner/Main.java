@@ -6,7 +6,6 @@ public final class Main {
     private Main() {}
 
     public static void main(String[] args) {
-        int exitCode = RunApp.runFromProjectConfig();
-        System.exit(exitCode);
+        System.exit(RunApp.runFromProjectConfig());
     }
 }

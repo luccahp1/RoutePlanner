@@ -12,42 +12,44 @@ public final class ProjectConfigLoader {
         try {
             Path cfgPath = Path.of("run-config.json");
             if (!Files.exists(cfgPath)) {
-                throw new IllegalStateException("Missing run-config.json in project root (beside pom.xml)");
+                throw new IllegalStateException(
+                        "Missing run-config.json in working directory: " + Path.of(".").toAbsolutePath()
+                );
             }
 
             ObjectMapper mapper = new ObjectMapper();
             ProjectConfig cfg = mapper.readValue(cfgPath.toFile(), ProjectConfig.class);
 
-            validate(cfg);
+            validateAndDefault(cfg);
             return cfg;
         } catch (Exception e) {
             throw new IllegalStateException("Failed to load run-config.json: " + e.getMessage(), e);
         }
     }
 
-    private static void validate(ProjectConfig cfg) {
-        if (cfg == null) {
-            throw new IllegalStateException("run-config.json is empty or invalid JSON");
-        }
-        if (cfg.depot == null || cfg.depot.isBlank()) {
-            throw new IllegalStateException("run-config.json missing required field: depot");
-        }
-        if (cfg.input == null || cfg.input.isBlank()) {
-            throw new IllegalStateException("run-config.json missing required field: input");
-        }
+    private static void validateAndDefault(ProjectConfig cfg) {
+        if (cfg == null) throw new IllegalStateException("run-config.json is empty or invalid JSON");
 
-        if (cfg.orsApiKey == null || cfg.orsApiKey.isBlank()) {
-            throw new IllegalStateException("run-config.json missing required field: orsApiKey");
-        }
+        // Required
+        if (isBlank(cfg.depot)) throw new IllegalStateException("run-config.json missing required field: depot");
+        if (isBlank(cfg.input)) throw new IllegalStateException("run-config.json missing required field: input");
+        if (isBlank(cfg.orsApiKey)) throw new IllegalStateException("run-config.json missing required field: orsApiKey");
 
-        if (cfg.profile == null || cfg.profile.isBlank()) {
-            cfg.profile = "driving-car";
-        }
-        if (cfg.outRoot == null || cfg.outRoot.isBlank()) {
-            cfg.outRoot = "output";
-        }
-        if (cfg.cacheRoot == null || cfg.cacheRoot.isBlank()) {
-            cfg.cacheRoot = "cache";
-        }
+        // Defaults
+        if (isBlank(cfg.profile)) cfg.profile = "driving-car";
+        if (isBlank(cfg.outRoot)) cfg.outRoot = "output";
+        if (isBlank(cfg.cacheRoot)) cfg.cacheRoot = "cache";
+
+        // Trim
+        cfg.depot = cfg.depot.trim();
+        cfg.input = cfg.input.trim();
+        cfg.orsApiKey = cfg.orsApiKey.trim();
+        cfg.profile = cfg.profile.trim();
+        cfg.outRoot = cfg.outRoot.trim();
+        cfg.cacheRoot = cfg.cacheRoot.trim();
+    }
+
+    private static boolean isBlank(String s) {
+        return s == null || s.trim().isEmpty();
     }
 }
